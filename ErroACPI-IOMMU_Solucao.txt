@@ -1,0 +1,28 @@
+Set-up:
+Processador: Ryzen 5 2400g AMD
+Placa mãe: Gigabyte A320m-S2H
+Memória RAM: 2x 4GB
+Armazenamento: SSD Kingston 240GB
+
+Foi obtido o seguinte log de erro:
+ACPI Error: [SMIC] Namespace lookup failure, AE_ALREADY_EXISTS (20170831/dswload-378)
+ACPI Exception: AE_ALREADY_EXISTS, During name lookup/catalog (20170831/psobject-252)
+ACPI Exception: AE_ALREADY_EXISTS, (SSDT: A M I) while loading table (20710831/tbxfload-228)
+ACPI Error: 1 table load failures, 7 successful (20170831/tbxfload-246)
+ACPI Error: [PTOS] Namespace lookup failure, AE_NOT_FOUND (20170831/psargs-364)
+ACPI Error: Method parse/execution failed \, AE_NOT_FOUND (20170831/psparse-550)
+AMD-VI: Unable to write to IOMMU perf counter.
+Couldn't get size: 0x800000000000000e
+MODSIGN: Couldn't get UEFI db list
+Couldn't get size: 0x800000000000000e
+
+Solução:
+Após muitas pesquisas em fóruns, cheguei a conclusão de que possa ser algum tipo de incompatibilidade entre o kernel do sistema (linux mint 19.1) e a BIOS da placa mãe, ou até mesmo com o processador/APU. É importante notar que obtive também uma dificuldade na hora da instalação do sistema, sendo realizada apenas no modo de compatibilidade, pois o normal realizava o mesmo tipo de erro do que o boot.
+A solução foi, para essas configurações e versão do sistema, bem simples: bastou que o kernel (veja bem, o kernel, e não o sistema como um todo) fosse atualizado. Aqui vai o passo a passo de como foi realizado esta operação:
+1 - O problema estava no boot, então como acessar o linux? Basta que, na tela do GRUB (GRUB2 neste caso), pressione a tecla 'e'. Assim será acessado uma tela com vários comandos escritos. Procurar a linha 'linux', nela substituir 'quiet slash' por 'nomodeset' (basta apagar e escrever). Depois apertar f10 (ou crtl+X) para que seja realizado o boot. Assim consegue-se entrar no linux.
+2 - No linux, basta que seja conectado a uma rede de internet e proseguir com a atualização do kernel. Para isso, basta acessar o Gerenciador de Atualizações e clicar em Ver na aba superior. Nela estará a opção Kernels Linux, basta clicar lá. Nela aparecerá todos os kernels acessíveis. No meu caso, instalei o kernel 5.0.0-16. Busque sempre o mais recente e que forneça maior tempo de suporte.
+3 - Clicar em instalar. Depois disso, no Gerenciador de Atualizações, clicar em Atualizar, para obter novas atualizações para o sistema. Basta atualizar o sistema.
+
+Com isso, é de se esperar que o boot será corrigido e não irá causar mais nenhum erro ao inicializar. É importante destacar que a BIOS deve estar com o modo de boot em UEFI, e não em Legacy. É recomendado também desativar o boot secure da BIOS.
+
+OBS.: No meu caso, o linux está instalado em um SSD, juntamento com o Windows 10 em um HDD. Ambos estão conectados na mesma placa mãe, porém a instalação de ambos foram feitas separadamente.
